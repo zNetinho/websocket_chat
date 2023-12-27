@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello Express!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <section class="header">
+      <h1><!-- Recebe título dinâmico. --></h1>
+      <div>
+        <a href="/rooms" class="link-voltar">
+          <button class="btn-voltar-rooms">
+            Voltar
+          </button>
+        </a>
+      </div>
+    </section>
+    <section class="wrapper__chat">
+      <div id="chat" class="chat">
+        <ul id="room" class="room__chat">
+          <!-- Mensagens inseridas aqui -->
+        </ul>
+        <div class="wrapper__inputs">
+          <input
+            id="text_msg"
+            class="box__msg"
+            type="text"
+            required
+            placeholder="Digite sua mensagem para enviar"
+          />
+        </div>
+        <button class="btn__send" id="btnSend" onclick="enviarMsg()">Enviar msg!</button>
+      </div>
+        <div class="wrapper__list__users">
+          <h2 class="title_naSala">Na sala (<span id="qntUsers"></span>)</h2>
+          <ul id="list__users">
+            
+          </ul>
+        </div>
+    </section>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+
+    <script defer>
+      const socket = io("/chat", {
+        auth: {
+          nomeUser: window.sessionStorage.getItem("nome_usuario"),
+          room_name: window.sessionStorage.getItem("room_name")
+        }
+      });
+
+      function enviarMsg() {
+        const user = window.sessionStorage.getItem("nome_usuario")
+        let textMsg = document.getElementById('text_msg');
+        // let nomeUser = document.getElementById('nome_user');
+        let dataMsg = {
+          message: textMsg.value,
+          user,
+        };
+        if(user === "") {
+          return alert('O nome do usuario não pode estar vazio')
+        } else if(textMsg.value === "") {
+          return alert('O texto da mensagem não pode estar vazio')
+        }
+        socket.emit('sendMsg', dataMsg);
+        textMsg.value = '';
+      }
+
+      function criarHorario() {
+        const date = new Date
+        const hour = date.getHours();
+        let minutes = date.getMinutes();
+        if(minutes < 10) {
+          minutes = `0${minutes}`
+        }
+        let time = `${hour}:${minutes}`
+        return time;
+      }
+
+      function criarMsg(dataMsg) {
+        console.log("dados da msg",dataMsg)
+        let time = criarHorario();
+        var chatWrapper = document.getElementById('chat');
+        var chatContainer = document.getElementById('room');
+        var chat = document.createElement('li');
+        var user = document.createElement("span");
+        if( dataMsg.user === window.sessionStorage.getItem("nome_usuario")) {
+          chat.setAttribute("class", "msg__box msg__box-my");
+          user.setAttribute("class", "nome__user nome__user-my");
+        } else {
+          chat.setAttribute("class", "msg__box");
+          user.setAttribute("class", "nome__user");
+        }
+
+        user.innerText = dataMsg.user;
+        chatContainer.appendChild(user);
+        var sendHour = document.createElement("span");
+        sendHour.setAttribute("class", "time__send")
+        sendHour.innerText = time
+        console.log(dataMsg);
+        chat.innerHTML = `${dataMsg.message}${sendHour.outerHTML}`;
+        chatContainer.appendChild(chat);
+        chatWrapper.scrollTop = chatWrapper.scrollHeight
+
+      }
+
+      socket.on('postMsg', (dataMsg) => {
+        criarMsg(dataMsg)
+      });
+
+      function iniciaChatPrivado(idSocket) {
+        socket.emit("chatPrivado", (idSocket))
+      }
+
+      socket.on("chatPrivadoIniciado", (novoChat) => {
+        console.log("dasd", novoChat)
+      })
+
+      function criarListaUsuarios(obj) {
+        console.log("lista de usuarios", obj)
+        for(i=0; i < obj.id.length; i++) {
+            const userToList = document.createElement('li');
+            var button = document.createElement("button")
+            button.setAttribute("id", obj.id[i])
+            button.setAttribute("class", "user__online");
+            button.addEventListener("click", function() {
+              console.log(event.target.attributes.id)
+              let idSocket = event.target.attributes.id.value
+              iniciaChatPrivado(idSocket);
+            })
+            const userListCheck = list__users.querySelectorAll("li");
+            userToList.innerText = obj.usersConnected[i].nome;
+            button.appendChild(userToList)
+            list__users.appendChild(button);
+        }
+      }
+
+      function nomearSala(room) {
+        const title = document.querySelector(".header > h1")
+        title.innerHTML = `Você está na: ${room}`
+      }
+
+      socket.on("nomear_sala", (obj) => {
+        console.log(obj)
+        nomearSala(obj)
+      })
+ 
+      socket.on('onlineUser', (obj) => {
+        console.log("Online", obj)
+        var listUser = document.getElementById('qntUsers');
+        var list__users = document.getElementById("list__users");
+        list__users.innerHTML = ""
+        listUser.innerText = obj.user_active;
+        criarListaUsuarios(obj)
+      });
+      
+    </script>
+
+    <p id="msgs"></p>
+  </body>
+</html>

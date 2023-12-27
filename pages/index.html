@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+  <main style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="login">
+      <h2 class="login__title">
+        Para acessar nosso chat digite o seu nome.<br/> Caso queira criar uma sala preencha o nome também
+      </h2>
+      <form class="login">
+        <label class="label__input_login" for="nameUser">
+          Nome *
+          <input 
+           type="text"
+           class="input__name"
+           id="nameUser"
+           aria-valuemin="2"
+           aria-valuemax="50"
+           placeholder="Digite o seu nome"
+          >
+         </label>
+         <label class="label__input_login" for="nameRoom">
+          Nome da sala (opcional)
+          <input type="text" class="input__sala" id="nameRoom" placeholder="Digite o nome da sala">
+         </label>
+      </form>
+      <button type="submit" onclick="entrarNaSala()" class="btn__entrar"> Entrar </button>
+   </div>
+  </main>
+  <script>
+    function entrarNaSala() {
+      const name = document.getElementById("nameUser");
+      const room = document.getElementById("nameRoom");
+      const username = name.value;
+      const roomName = room.value;
+      window.sessionStorage.setItem("nome_usuario", username);
+      window.sessionStorage.setItem("nome_room", roomName);
+
+      if(username === "") {
+        return alert("Por favor digite um nome");
+      }
+
+      window.location.href = "rooms"
+    }
+  </script>
+</body>
+</html>

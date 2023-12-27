@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello Express!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Hello Express!</h1>
+
+    <section class="wrapper__chat">
+      <div id="chat" class="chat">
+        <ul id="room" class="room__chat">
+          <!-- Mensagens inseridas aqui -->
+        </ul>
+        <div class="wrapper__inputs">
+          <input
+            id="text_msg"
+            class="box__msg"
+            type="text"
+            required
+            placeholder="Digite sua mensagem para enviar"
+          />
+        </div>
+        <button class="btn__send" id="btnSend" onclick="enviarMsg()">Enviar msg!</button>
+      </div>
+        <div class="wrapper__list__users">
+          <h2 class="title_naSala">Na sala (<span id="qntUsers"></span>)</h2>
+          <ul id="list__users">
+            
+          </ul>
+        </div>
+    </section>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script>
+      var socket = io(`/chat-private`);
+      
+      // function entrarNoChat() {
+      //   const nameUser = document.getElementById("nameUser")
+      //   console.log(nameUser)
+      //   const nameRoom = document.getElementById("nameRoom")
+      //   console.log(nameRoom)
+      //   let dataUser = {
+      //     name: nameUser.value,
+      //     room: nameRoom.value
+      //   }
+      //   console.log(dataUser)
+      //     if(nameRoom.value) {
+      //       socket.emit("login" {name: dataUser})
+            
+      //     } else {
+
+      //     }
+      // }
+
+      function enviarMsg() {
+        const user = window.sessionStorage.getItem("nome_usuario")
+        let textMsg = document.getElementById('text_msg');
+        // let nomeUser = document.getElementById('nome_user');
+        let dataMsg = {
+          message: textMsg.value,
+          user,
+        };
+        if(user === "") {
+          return alert('O nome do usuario não pode estar vazio')
+        }
+        socket.emit('sendMsg', dataMsg);
+        textMsg.value = '';
+      }
+
+      function criarHorario() {
+        const date = new Date
+        const hour = date.getHours();
+        let minutes = date.getMinutes();
+        if(minutes < 10) {
+          minutes = `0${minutes}`
+        }
+        let time = `${hour}:${minutes}`
+        return time;
+      }
+
+      function criarMsg(dataMsg) {
+        let time = criarHorario();
+        var chatWrapper = document.getElementById('chat');
+        var chatContainer = document.getElementById('room');
+        var chat = document.createElement('li');
+        chat.setAttribute("class", "msg__box");
+        var user = document.createElement("span");
+        user.setAttribute("class", "nome__user");
+        user.innerText = dataMsg.user;
+        chatContainer.appendChild(user);
+        var sendHour = document.createElement("span");
+        sendHour.setAttribute("class", "time__send")
+        sendHour.innerText = time
+        console.log(dataMsg);
+        chat.innerHTML = `${dataMsg.message}${sendHour.outerHTML}`;
+        chatContainer.appendChild(chat);
+        chatWrapper.scrollTop = chatWrapper.scrollHeight
+      }
+
+      socket.on('postMsg', (dataMsg) => {
+        criarMsg(dataMsg)
+      });
+
+      function criarListaUsuarios(obj) {
+        console.log(obj)
+        for(i=0; i < obj.id.length; i++) {
+          const userToList = document.createElement('li');
+          var button = document.createElement("button")
+          button.setAttribute("id", obj.id[i])
+          button.setAttribute("class", "user__online");
+          const userListCheck = list__users.querySelectorAll("li");
+          userToList.setAttribute("id", `${obj.id[i]}`);
+          let idSocket = obj.id[i]
+          userToList.innerText = obj.usersConnected[i].nome;
+          button.appendChild(userToList)
+          list__users.appendChild(button);
+        }
+      }
+
+      socket.on('onlineUser', (obj) => {
+        var listUser = document.getElementById('qntUsers');
+        var list__users = document.getElementById("list__users");
+        list__users.innerHTML = ""
+        listUser.innerText = obj.user_active;
+        criarListaUsuarios(obj)
+      });
+      
+    </script>
+
+    <p id="msgs"></p>
+  </body>
+</html>

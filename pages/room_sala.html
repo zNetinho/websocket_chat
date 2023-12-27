@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="heading_title" style="display: flex;justify-content: center;">
+        Salas disponíveis
+    </h1>
+    <section class="wrapper__chat" style="justify-content: center;">
+        <div class="wrapper__list__users">
+            <h2 class="title_naSala">Salas (<span id="qntRooms"></span>)</h2>
+            <ul id="list__rooms">
+              
+            </ul>
+          </div>
+      </section>
+      <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+      <script>
+        var socket = io("/rooms", {})
+
+        socket.on("listerRooms", (rooms) => {
+            criarListaDeSalas(rooms);
+        })
+
+        //função para listar as salas na tela
+        function criarListaDeSalas(obj) {
+        console.log(obj)
+        const listRooms = document.getElementById("list__rooms");
+        const qntRooms = document.getElementById("qntRooms");
+        listRooms.innerHTML = ""
+            obj.map((item) => {
+                const sala = document.createElement("li")
+                const boxSala = document.createElement("button")
+                boxSala.setAttribute("id", item)
+                boxSala.appendChild(sala)
+                sala.innerText = item
+                listRooms.appendChild(boxSala)
+                boxSala.addEventListener('click', function(event) {
+                    iniciaSala(this, event)
+                })
+            })
+            qntRooms.innerText = obj.length
+      }
+
+      function iniciaSala(e) {
+        const nameRoom = e.id
+        window.sessionStorage.setItem("room_name", nameRoom)        
+        console.log(nameRoom)
+        window.location.href = "/chat"
+      }
+
+      </script>
+</body>
+</html>

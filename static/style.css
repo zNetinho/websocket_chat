@@ -1,0 +1,285 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  color: black;
+  background-color: #b5b4b4;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+input {
+  font-size: 18px;
+  font-weight: 500;
+  color: #11111a;
+  border-radius: 8px;
+  height: 30px;
+  outline: none;
+  border: none;
+}
+
+input::placeholder {
+  font-size: 16px;
+  color: #afaeae;
+}
+
+input:focus {
+  border: 1px solid rgb(119, 113, 113);
+  box-shadow: #fff9f9;
+}
+
+ul {
+  list-style: none;
+  padding: 0 1rem;
+}
+
+main {
+  background-color: #040408;
+}
+
+.login {
+  backdrop-filter: blur(4px);
+  background-color: #bbb0b0;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 600px;
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 1rem 1rem;
+  justify-content: center;
+  align-items: center;
+  color: steelblue;
+}
+
+.login__title {
+  text-align: center;
+}
+
+.label__input_login {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 100px;
+  font-size: 22px;
+  font-weight: 600;
+  color: floralwhite;
+}
+
+.input__name {
+  border: none;
+  margin-top: 8px;
+  height: 45px;
+}
+
+.input__sala {
+  border: none;
+  margin-top: 8px;
+  height: 45px;
+}
+
+.btn__entrar {
+  width: 60%;
+  color: #000;
+  background: rgb(40, 121, 186);
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.btn__entrar:hover {
+  background: rgb(17, 131, 224);
+}
+
+.btn__entrar:active {
+  position: relative;
+  top: 2px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.btn-voltar-rooms {
+  padding: .5rem 1rem;
+  border: 0;
+  border-radius: 12px;
+  background-color: #b3b0b0;
+}
+
+.btn-voltar-rooms:hover {
+  background-image: linear-gradient(to right, #949494 0%, #888888 50%, transparent 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  transition: background-position 2s ease;
+}
+
+.link-voltar > button:hover {
+  cursor: pointer;
+  color: white;
+}
+
+.link-voltar > button {
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.wrapper__chat{
+  display: flex;
+  margin: auto;
+}
+
+.wrapper__list__users {
+  width: 25%;
+}
+
+.user__online {
+  display: flex;
+  height: 40px;
+  width: 100%;
+  border: none;
+  margin: .5rem 0;
+  background-color: #b3b0b0;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.user__online:active {
+  position: relative;
+  top: 2px;
+}
+
+.title_naSala {
+  margin-left: 1rem;
+}
+
+.chat {
+  width: 80%;
+  height: 80vh;
+  border: 1px solid white;
+  border-radius: 4px;
+  overflow-y: scroll;
+}
+
+.chat::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 8px;
+  background-color: #b5bab6;
+}
+
+.chat::-webkit-scrollbar-button {
+  display: none;
+}
+
+.chat::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 4px;
+  background-color: #5c5c5c;
+}
+
+#list__rooms {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#list__rooms > button {
+  padding: 1rem 1.5rem;
+  font-size: 22px;
+  font-weight: 600;
+  font-family: system-ui;
+  border-radius: 12px;
+  background-image: linear-gradient(to left, #626262 0%, #818881 50%, transparent 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: background-position 1.5s ease;
+  border: 0;
+}
+
+#list__rooms > button:hover {
+  position: relative;
+  top: 1px;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #4CAF50 0%, #4CAF50 50%, transparent 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  transition: background-position 2s ease;
+}
+
+.nome__user {
+  font-weight: bold;
+}
+
+.msg__box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: auto;
+    min-height: 40px;
+    background-color: #bbb0b0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 3px;
+    margin-bottom: 8px;
+}
+
+.msg__box-my {
+  background-color: #99c99b;
+}
+
+.time__send {
+    display: flex;
+    align-self: flex-end;
+    font-size: 12px;
+}
+
+.wrapper__list__users {
+  background-color: #c9c9c9;
+  border-radius: 12px;
+}
+
+.room__chat {
+  width: 100%;
+  height: auto;
+}
+
+.wrapper__inputs {
+  display: flex;
+  position: absolute;
+  bottom: 0.5rem;
+  width: 90%;
+}
+
+.box__msg {
+  height: 45px;
+  width: 84%;
+}
+
+.btn__send {
+  position: absolute;
+  height: 45px;
+  border: none;
+  bottom: 0.5rem;
+  border-radius: 8px;
+  background-color: #02a70a;
+  color: white;
+  font-weight: 600;
+  right: 12%;
+}
